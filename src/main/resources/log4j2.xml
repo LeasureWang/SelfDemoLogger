@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="off" monitorInterval="1800">
+
+    <Properties>
+        <property name="LOG_PATH" value="/Users/leasure/project-logs"/>
+        <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-10thread] %-5level | %logger{50} : %msg%n"/>
+        <property name="SAVE_TIME" value="2d"/>
+    </Properties>
+
+    <Appenders>
+
+        <!-- console -->
+        <Console name="CONSOLE_LOGGER">
+            <!--            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+        </Console>
+
+        <!-- debug -->
+        <RollingRandomAccessFile name="DEBUG_LOGGER"
+                                 fileName="${LOG_PATH}/demoProject-debug.log"
+                                 filePattern="${LOG_PATH}/debug/demoProject-debug-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+            <Filters>
+                <LevelRangeFilter minLevel="debug" maxLevel="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="1MB"/>
+            </Policies>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${LOG_PATH}/debug" maxDepth="2">
+                    <IfFileName glob="*.log.gz"/>
+                    <IfLastModified age="${SAVE_TIME}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <!-- info -->
+        <RollingRandomAccessFile name="INFO_LOGGER"
+                                 fileName="${LOG_PATH}/demoProject-info.log"
+                                 filePattern="${LOG_PATH}/info/demoProject-info-%d{yyyy-MM-dd}-%i.log.gz">
+
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+
+            <Filters>
+                <!--                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>-->
+                <!-- 方式一 -->
+                <LevelRangeFilter minLevel="info" maxLevel="info" onMatch="ACCEPT" onMismatch="DENY"/>
+                <!-- 方式二 -->
+                <!--                <ThresholdFilter level="INFO"/>-->
+                <!--                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>-->
+            </Filters>
+
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="1MB"/>
+            </Policies>
+
+            <!-- default=7 -->
+            <!-- 如果开启下面的删除策略，这里必须使用默认7-->
+            <!--            <DefaultRolloverStrategy max="10"/>-->
+
+            <DefaultRolloverStrategy>
+                <Delete basePath="${LOG_PATH}/info" maxDepth="2">
+                    <IfFileName glob="*.log.gz"/>
+                    <IfLastModified age="${SAVE_TIME}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <!-- error -->
+        <RollingRandomAccessFile name="ERROR_LOGGER"
+                                 fileName="${LOG_PATH}/demoProject-error.log"
+                                 filePattern="${LOG_PATH}/error/demoProject-error-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+            <Filters>
+                <LevelRangeFilter minLevel="error" maxLevel="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="1MB"/>
+            </Policies>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${LOG_PATH}/error" maxDepth="2">
+                    <IfFileName glob="*.log.gz"/>
+                    <IfLastModified age="${SAVE_TIME}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+    </Appenders>
+
+
+    <Loggers>
+
+        <AsyncRoot level="info" includeLocation="true">
+            <AppenderRef ref="DEBUG_LOGGER"/>
+            <AppenderRef ref="INFO_LOGGER"/>
+            <AppenderRef ref="ERROR_LOGGER"/>
+            <AppenderRef ref="CONSOLE_LOGGER"/>
+        </AsyncRoot>
+
+        <!--        <Root level="DEBUG" includeLocation="true">-->
+        <!--            <AppenderRef ref="DEBUG_LOGGER"/>-->
+        <!--            <AppenderRef ref="INFO_LOGGER"/>-->
+        <!--            <AppenderRef ref="ERROR_LOGGER"/>-->
+        <!--            <AppenderRef ref="CONSOLE_LOGGER"/>-->
+        <!--        </Root>-->
+
+        <!--        <AsyncLogger name="springfox" level="OFF"></AsyncLogger>-->
+
+        <!--        <AsyncLogger name="cn.leasure.logger.customdemo.businessLogic" level="info" additivity="false">-->
+        <!--            <AppenderRef ref="INFO_LOGGER"/>-->
+        <!--        </AsyncLogger>-->
+
+        <!--        &lt;!&ndash;第三方日志配置&ndash;&gt;-->
+        <!--        <Logger name="org.springframework" level="warn"/>-->
+        <!--        <Logger name="org.quartz" level="warn"/>-->
+        <!--        <Logger name="org.mybatis" level="warn"/>-->
+        <!--        <Logger name="org.apache" level="warn"/>-->
+
+    </Loggers>
+
+</Configuration>
