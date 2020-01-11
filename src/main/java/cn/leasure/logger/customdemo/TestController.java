@@ -1,6 +1,5 @@
 package cn.leasure.logger.customdemo;
 
-import jdk.internal.org.objectweb.asm.tree.IntInsnNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
